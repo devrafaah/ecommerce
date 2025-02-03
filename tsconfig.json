@@ -1,0 +1,16 @@
+{
+  "extends": "@tsconfig/recommended/tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",                                    
+    "outDir": "lib",                                   
+    "sourceMap": true,                                
+    "noEmitOnError": true,
+    "noUnusedLocals": true,                             
+    "noImplicitReturns": true,
+    "strictNullChecks": true,                           
+    "skipLibCheck": true                                
+  },
+  "compileOnSave": true,
+  "include": ["src/**/*"],
+  "exclude": ["**/*.spec.ts"]
+}
