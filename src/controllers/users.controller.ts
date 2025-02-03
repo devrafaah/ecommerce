@@ -1,62 +1,31 @@
-import {Response, Request} from 'express';
+import { Response, Request, NextFunction } from 'express';
+import { UserService } from '../services/user.service';
 
-interface User {
-    id : number
-    nome : string,
-    email : string
-}
-let users : User[] = []
-let id = 0;
-
-function novoUsuario(id: number, nome:string, email: string) : User {
-    const usuario : User = {id,nome,email}
-    return usuario;
-}
 
 export class UsersController {
-    static getAll(req: Request, res: Response){
-        res.send(users);
+    static async getAll(req: Request, res: Response, next: NextFunction) {
+        res.send(await new UserService().getAll());
     }
 
-    static getUserById(req: Request, res: Response) {
-        let userId = Number(req.params.id);
-        let user = users.find(user => user.id === userId);
-        res.send(user);
+    static async getUserById(req: Request, res: Response, next: NextFunction) {
+        res.send(await new UserService().getUserById(req.params.id))
     }
 
-    static save(req: Request, res: Response) {
-        let user : User = req.body;
-        user.id = ++id;
-        users.push(
-            novoUsuario(user.id, user.nome, user.email)
-        );
-        res.send("Usuario Adicionado com sucesso -> " + user.id);
+    static async save(req: Request, res: Response, next: NextFunction) {
+        await new UserService().save(req.body)
+        res.status(201).send("Usuário cadastrado com sucesso!");
     }
 
-    static update(req: Request, res: Response) {
-        let userId = Number(req.params.id);
-        let user = req.body;
-    
-        let indexOf = users.findIndex( (usuario: User) => usuario.id === userId);
-    
-        users[indexOf].email = user.email;
-        users[indexOf].nome = user.nome;
-    
+    static async update(req: Request, res: Response, next: NextFunction) {
+        await new UserService().update(req.params.id, req.body);
         res.send({
-            message : "Atualizado com sucesso"
+            message : "Usuario alterado com sucesso !"
         });
-    
     }
 
-    static delete(req: Request, res: Response){
-        let userId = Number(req.params.id);
-    
-        let findIndex = users.findIndex((user : User) => user.id === userId);
-        users.splice(findIndex, 1);
-    
-        res.send({
-            message : "Usuario removido",
-        });
+    static async delete(req: Request, res: Response, next: NextFunction) {
+        await new UserService().remove(req.params.id)
+        res.status(204).end();
     }
 
 }

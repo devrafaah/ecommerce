@@ -1,18 +1,24 @@
 import express from 'express';
 import { UsersController } from '../controllers/users.controller';
+import asyncHandler from 'express-async-handler';
+import { celebrate, Segments } from 'celebrate';
+import { AuthUpdateSchema, userSchema } from '../models/user.model';
 
 
-//middlewere
+
 // arquestrador 
 // criador de modulos 
 export const userRoutes = express.Router();
 
-userRoutes.get("/getusuarios", UsersController.getAll);
-
-userRoutes.get("/getUsuario/:id", UsersController.getUserById);
-
-userRoutes.post("/usuario", UsersController.save);
-
-userRoutes.put("/atualizar/:id", UsersController.update);
-
-userRoutes.delete("/deletar/:id", UsersController.delete);
+userRoutes.get("/getusuarios", asyncHandler(UsersController.getAll));
+userRoutes.get("/getUsuario/:id", asyncHandler(UsersController.getUserById));
+userRoutes.post(
+    "/usuario", 
+    celebrate({[Segments.BODY] : userSchema}), 
+    asyncHandler(UsersController.save)
+);
+userRoutes.put(
+    "/atualizar/:id",
+    celebrate({[Segments.BODY] : AuthUpdateSchema}),
+    asyncHandler(UsersController.update));
+userRoutes.delete("/deletar/:id", asyncHandler(UsersController.delete));
