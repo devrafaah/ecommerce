@@ -1,8 +1,8 @@
 import express from 'express';
-import { UsersController } from '../controllers/users.controller';
+import { UsersController } from '../controllers/users.controller.js';
 import asyncHandler from 'express-async-handler';
 import { celebrate, Segments } from 'celebrate';
-import { AuthUpdateSchema, userSchema } from '../models/user.model';
+import { AuthUpdateSchema, userSchema } from '../models/user.model.js';
 
 
 

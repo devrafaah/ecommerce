@@ -1,8 +1,8 @@
 import express from 'express';
 import asyncHandler from 'express-async-handler';
-import { AuthController } from '../controllers/auth.controller';
+import { AuthController } from '../controllers/auth.controller.js';
 import { celebrate, Segments } from 'celebrate';
-import { AuthLoginSchema, AuthRecoverySchema } from '../models/user.model';
+import { AuthLoginSchema, AuthRecoverySchema } from '../models/user.model.js';
 
 export const authRoute = express.Router();
 
