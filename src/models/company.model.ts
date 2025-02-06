@@ -20,7 +20,7 @@ export const newCompanySchema = Joi.object().keys({
     cpfCnpj : Joi.alternatives().try(
         Joi.string().length(11).required(),
         Joi.string().length(14).required()
-    ),
+    ).required(),
     razaoSocial : Joi.string().required(),
     nomeFantasia : Joi.string().required(),
     telefone : Joi.string().regex(/(?:([+]\d{1,4})[-.\s]?)?(?:[(](\d{1,3})[)][-.\s]?)?(\d{1,4})[-.\s]?(\d{1,4})[-.\s]?(\d{1,9})/).required(),
@@ -28,16 +28,19 @@ export const newCompanySchema = Joi.object().keys({
     endereco : Joi.string().required(),
     localizacao : Joi.string().required(),
     taxaEntrega : Joi.number().required(),
-    ativa : Joi.string().only().allow(true).default(true)
+    ativa : Joi.boolean().only().allow(true).default(true)
 })
 
 
 export const updateCompanySchema = Joi.object().keys({
-    logomarca : Joi.string().base64().required(),
+    logomarca : Joi.alternatives().try(
+        Joi.string().base64().required(),
+        Joi.string().uri().required(),
+    ).required(),
     cpfCnpj : Joi.alternatives().try(
         Joi.string().length(11).required(),
         Joi.string().length(14).required()
-    ),
+    ).required(),
     razaoSocial : Joi.string().required(),
     nomeFantasia : Joi.string().required(),
     telefone : Joi.string().regex(/(?:([+]\d{1,4})[-.\s]?)?(?:[(](\d{1,3})[)][-.\s]?)?(\d{1,4})[-.\s]?(\d{1,4})[-.\s]?(\d{1,9})/).required(),
@@ -45,5 +48,5 @@ export const updateCompanySchema = Joi.object().keys({
     endereco : Joi.string().required(),
     localizacao : Joi.string().required(),
     taxaEntrega : Joi.number().required(),
-    ativa : Joi.string().required()
+    ativa : Joi.boolean().required()
 })

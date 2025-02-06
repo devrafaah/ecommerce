@@ -1,25 +1,32 @@
 import { v2 as cloudinary } from "cloudinary";
-import { fileTypeFromFile } from 'file-type';
+import { randomUUID } from "crypto";
+import { fileTypeFromBuffer } from 'file-type';
+import { ValidationError } from "../errors/validation.error.js";
 
 
 export class UploadFileService {
 
-    async upload(base64: string) : Promise<string> {
-        let baseUrlImage = base64;
-        const fileType = await fileTypeFromFile(baseUrlImage);
+    async upload(base64: string): Promise<string> {
 
-        await cloudinary.uploader.upload(
-            "data:image/"+fileType?.ext+";base64," + baseUrlImage, {
-                public_id : "Naruto Uzumaki",
-                folder : "imagens/logomarca",
-                format : fileType?.ext,
-            }
-        ).then(results => {
-            baseUrlImage = results.secure_url;
-        }).catch (error => {
-            throw new Error("Erro Inesperado : "+error);
+
+        const buffer = Buffer.from(base64, 'base64');
+
+        const fileType = await fileTypeFromBuffer(buffer);
+        if (!fileType) {
+            throw new ValidationError("Extensão do arquivo não é válida")
+        }
+        if (fileType.mime !== "image/jpeg" && fileType.mime !== "image/png") {
+            throw new ValidationError("A imagem precisa ser PNG ou JPEG!")
+        }
+
+        const dataURI = `data:${fileType.mime};base64,${base64}`;
+        const result = await cloudinary.uploader.upload(dataURI, {
+            folder: "imagens/logomarca",
+            public_id: randomUUID().toString(),
+            resource_type: 'auto'
         });
-        console.log("URL : " + baseUrlImage);
-        return baseUrlImage;
+        return result.secure_url;
+
+
     }
 }
