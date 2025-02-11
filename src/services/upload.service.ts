@@ -6,11 +6,11 @@ import { ValidationError } from "../errors/validation.error.js";
 
 export class UploadFileService {
 
-    async upload(base64: string): Promise<string> {
+    async upload(base64: string, folderUrl : string): Promise<string> {
 
 
         const buffer = Buffer.from(base64, 'base64');
-
+        console.log(buffer);
         const fileType = await fileTypeFromBuffer(buffer);
         if (!fileType) {
             throw new ValidationError("Extensão do arquivo não é válida")
@@ -21,7 +21,7 @@ export class UploadFileService {
 
         const dataURI = `data:${fileType.mime};base64,${base64}`;
         const result = await cloudinary.uploader.upload(dataURI, {
-            folder: "imagens/logomarca",
+            folder: folderUrl,
             public_id: randomUUID().toString(),
             resource_type: 'auto'
         });

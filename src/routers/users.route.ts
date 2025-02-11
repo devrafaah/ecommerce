@@ -10,15 +10,8 @@ import { AuthUpdateSchema, userSchema } from '../models/user.model.js';
 // criador de modulos 
 export const userRoutes = express.Router();
 
-userRoutes.get("/getusuarios", asyncHandler(UsersController.getAll));
-userRoutes.get("/getUsuario/:id", asyncHandler(UsersController.getUserById));
-userRoutes.post(
-    "/usuario", 
-    celebrate({[Segments.BODY] : userSchema}), 
-    asyncHandler(UsersController.save)
-);
-userRoutes.put(
-    "/atualizar/:id",
-    celebrate({[Segments.BODY] : AuthUpdateSchema}),
-    asyncHandler(UsersController.update));
-userRoutes.delete("/deletar/:id", asyncHandler(UsersController.delete));
+userRoutes.get("/users/getAll", asyncHandler(UsersController.getAll));
+userRoutes.get("/users/getById/:id", asyncHandler(UsersController.getUserById));
+userRoutes.post("/users/save", celebrate({[Segments.BODY] : userSchema}),asyncHandler(UsersController.save));
+userRoutes.put("/users/update/:id",celebrate({[Segments.BODY] : AuthUpdateSchema}),asyncHandler(UsersController.update));
+userRoutes.delete("/users/delete/:id", asyncHandler(UsersController.delete));

@@ -2,7 +2,8 @@ import { Company } from "../models/company.model.js";
 import { NotFoundError } from "../errors/not-found.error.js";
 import { CompanyRepository } from "../repositories/company.repository.js";
 import { UploadFileService } from "./upload.service.js";
-import { ValidationError } from "../errors/validation.error.js";
+import { isCloudiaryUrlValid } from "../utils/validation-utils.js";
+
 
 export class CompanyService {
 
@@ -29,7 +30,7 @@ export class CompanyService {
     }
 
     async save(company : Company) : Promise<void>{
-        const urlFile = await this.uploadFileService.upload(company.logomarca);
+        const urlFile = await this.uploadFileService.upload(company.logomarca, "images/companies");
         company.logomarca = urlFile;
         console.log(urlFile)
         await this.companyRepository.save(company);
@@ -40,8 +41,8 @@ export class CompanyService {
         if(!_company) {
             throw new NotFoundError("Empresa não encontrado");
         }
-        if(!this.isValidUrl(company.logomarca)){
-            _company.logomarca = await this.uploadFileService.upload(company.logomarca);
+        if(!isCloudiaryUrlValid(company.logomarca)){
+            _company.logomarca = await this.uploadFileService.upload(company.logomarca, "images/companies");
         }
         _company.logomarca = company.logomarca,
         _company.cpfCnpj = company.cpfCnpj,
@@ -57,19 +58,4 @@ export class CompanyService {
         await this.companyRepository.update(_company);
     }
 
-    private isValidUrl(urlString: string) : boolean {
-        try {
-            const url = new URL(urlString);
-            if(url.host != "res.cloudinary.com"){
-                throw new ValidationError("URL de origem invalida!")
-            }
-            return true;
-        } catch (error) {
-            if(error instanceof ValidationError) {
-                throw error;
-            }
-            return false;
-            
-        }
-    }
 }
