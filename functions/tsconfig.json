@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "module": "node16",
+    "target": "es2022",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node16",
+    "rootDir": "src",                                    
+    "outDir": "lib",                                   
+    "sourceMap": true,                                
+    "noEmitOnError": true,
+    "noUnusedLocals": true,                             
+    "noImplicitReturns": true,
+    "strictNullChecks": true,
+    "allowSyntheticDefaultImports": true,
+                                
+  },
+  "compileOnSave": true,
+  "include": ["src/**/*", "functions/src/@types"],
+  "exclude": ["**/*.spec.ts"]
+}
