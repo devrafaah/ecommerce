@@ -9,10 +9,12 @@ import { v2 as cloudinary } from 'cloudinary';
 import { onRequest } from "firebase-functions/https";
 
 
-initializeApp();
+
+
 initializeFirebaseApp({
-    apiKey : process.env.FIRE_API_KEY
+    apiKey: process.env.API_KEY,
 });
+initializeApp();
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
     api_key : process.env.CLOUDINARY_APIKEY,

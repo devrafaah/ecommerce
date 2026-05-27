@@ -1,4 +1,5 @@
-import express, { Request, Response, NextFunction} from 'express';
+import express from 'express';
+import type { Request, Response, NextFunction} from 'express';
 import { InternalServerError } from '../errors/internal-server.error.js';
 import { errors } from 'celebrate';
 import { ErrorBase } from '../errors/base.error.js';
